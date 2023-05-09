@@ -1,98 +1,113 @@
 import React from "react";
+import { Container, InfoBox, InfoButton, SideMenus } from "./MyPage";
 import { useState } from "react";
-import {
-  Button,
-  Container,
-  Form,
-  Header,
-  Input,
-} from "../../LoginForm/LoginFormSty";
+import DetailsForm from "./BoxPages/DetailsForm";
+import ChangePwForm from "./BoxPages/ChangePwForm";
+import ViewForm from "./BoxPages/ViewForm";
+import LikeForm from "./BoxPages/LikeForm";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import apiServer from "../../../api/api";
-import { Warning } from "../../RegisterForm/RegisterSty";
 
-const ChangePwForm = () => {
-  // const [password, setPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [newPasswordOk, setNewPasswordOk] = useState(false);
-  const [confirmPassword, setConfirmPassword] = useState("");
-
+const MyPageForm = () => {
+  const [infoBoxContent, setInfoBoxContent] = useState(<DetailsForm />);
   const navigate = useNavigate();
 
-  const containsSpecialCharacter = (newPassword) => {
-    const specialCharacterRegex = /[!@#$%^&*(),.?":{}|<>]/;
-    return specialCharacterRegex.test(newPassword);
-  };
+  // useEffect(() => {
+  //   if (!localStorage.getItem("id")) {
+  //     navigate("/login");
+  //     alert("로그인 후 이용가능합니다.");
+  //     return;
+  //   }
+  // }, [navigate]);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    // console.log("Password:", password);
-    console.log("New Password:", newPassword);
-    console.log("Confirm Password:", confirmPassword);
-
-    if (newPassword !== confirmPassword) {
-      alert("비밀번호가 일치하지 않습니다.");
-      return;
-    }
-    if (!containsSpecialCharacter(newPassword)) {
-      alert("비밀번호에는 최소 1개의 특수 문자가 포함되어야 합니다.");
-      return;
-    }
-
-    try {
-      const response = await axios.put(`${apiServer}/api/user/~~~`, {
-        newPassword,
-      });
-      alert("비밀번호 변경 성공");
-      navigate("/login");
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleButtonClick = (content) => {
+    setInfoBoxContent(content);
   };
 
   return (
-    <Container>
-      <Form onSubmit={handleSubmit}>
-        <Header>비밀번호 변경</Header>
-        {/* <Input
-          type="password"
-          placeholder="현재 비밀번호"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        /> */}
-        <Input
-          type="password"
-          placeholder="새 비밀번호"
-          value={newPassword}
-          onChange={(e) => {
-            setNewPassword(e.target.value);
-            if (containsSpecialCharacter(e.target.value)) {
-              setNewPasswordOk(true);
-            } else {
-              setNewPasswordOk(false);
-            }
-          }}
-          required
-        />
-        {!newPasswordOk ? (
-          <Warning>특수문자를 1개 이상 포함해야 합니다.</Warning>
-        ) : (
-          <div style={{ marginBottom: "0" }} />
-        )}
-        <Input
-          type="password"
-          placeholder="새 비밀번호 확인"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          required
-        />
-        <Button type="submit">확인</Button>
-      </Form>
-    </Container>
+    <>
+      <SideMenus>
+        <Container>
+          <InfoButton onClick={() => handleButtonClick(<DetailsForm />)}>
+            <span class="material-symbols-outlined">
+              info
+              <span
+                style={{
+                  fontSize: "17px",
+                  position: "relative",
+                  bottom: "5px",
+                  left: "10px",
+                }}
+              >
+                내 정보
+              </span>
+            </span>
+          </InfoButton>
+          <InfoButton onClick={() => handleButtonClick(<ChangePwForm />)}>
+            <span class="material-symbols-outlined">
+              lock
+              <span
+                style={{
+                  fontSize: "17px",
+                  position: "relative",
+                  bottom: "5px",
+                  left: "10px",
+                }}
+              >
+                비밀번호 변경
+              </span>
+            </span>
+          </InfoButton>
+          <InfoButton onClick={() => handleButtonClick(<ViewForm />)}>
+            <span class="material-symbols-outlined">
+              order_approve
+              <span
+                style={{
+                  fontSize: "17px",
+                  position: "relative",
+                  bottom: "5px",
+                  left: "10px",
+                }}
+              >
+                내 글 보기
+              </span>
+            </span>
+          </InfoButton>
+          <InfoButton onClick={() => handleButtonClick(<LikeForm />)}>
+            <span class="material-symbols-outlined">
+              favorite
+              <span
+                style={{
+                  fontSize: "17px",
+                  position: "relative",
+                  bottom: "5px",
+                  left: "10px",
+                }}
+              >
+                좋아요 리스트
+              </span>
+            </span>
+          </InfoButton>
+          <InfoButton>
+            <span class="material-symbols-outlined">
+              waving_hand
+              <span
+                style={{
+                  fontSize: "17px",
+                  position: "relative",
+                  bottom: "5px",
+                  left: "10px",
+                }}
+              >
+                회원탈퇴
+              </span>
+            </span>
+          </InfoButton>
+        </Container>
+      </SideMenus>
+      <InfoBox>{infoBoxContent}</InfoBox>
+    </>
   );
 };
 
-export default ChangePwForm;
+export default MyPageForm;
