@@ -136,14 +136,9 @@ const NewQuestion = () => {
       <input type="hidden" value={username} onChange={setUsername} />
       <input type="hidden" value={create_date} onChange={setCreate_date} />
       <ButtonContainer>
-        <Button
-          type="submit"
-          variant="success"
-          style={{ margin: "0" }}
-          onClick={handleSubmit}
-        >
+        <Button type="submit" onClick={handleSubmit}>
           업로드하기
-        </Button>{" "}
+        </Button>
       </ButtonContainer>
     </WriteContainer>
   );
